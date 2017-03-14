@@ -1,0 +1,1 @@
+/u/nyc/pechersk/.vimrc
