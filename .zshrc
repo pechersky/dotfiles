@@ -1,18 +1,6 @@
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
-# GARDEN INIT
-garden() { { . <(/usr/bin/garden-exec --shell=zsh "$@"); } 3>&1; }
-# GARDEN IMPORTS
-garden load git/2.9.3-12A/bin
-garden load git-review/1.25.0-08A/bin
-garden load git-repo/1.12.16-03A/bin
-garden load freerdp/0.8.2-01/bin
-garden load htop/1.0.3-03/bin
-garden load vim/8.0.0314-12B/bin
-#garden load pylint/1.6.4-03/lib-python
-
-
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
