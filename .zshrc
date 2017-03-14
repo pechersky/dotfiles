@@ -88,6 +88,8 @@ alias edit-vim="vim ~/.vimrc"
 alias xcl="xclip -selection clipboard"
 alias gxcl="xclip -selection clipboard -o"
 
+export DISPLAY=:0
+
 alias remotewin='xfreerdp -a 16 -g 960x1040 -d deshaw spacemap -r sound:remote &'
 alias gerrit="ssh gerrit gerrit"
 
