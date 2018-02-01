@@ -86,6 +86,7 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias edit-vim="vim ~/.vimrc"
 alias xcl="xclip -selection clipboard"
+alias gxcl="xclip -selection clipboard -o"
 
 alias remotewin='xfreerdp -a 16 -g 960x1040 -d deshaw spacemap -r sound:remote &'
 alias gerrit="ssh gerrit gerrit"
@@ -110,7 +111,6 @@ autoload -Uz bashcompinit && bashcompinit
 export CUDA_VISIBLE_DEVICES=0
 export PATH="/u/nyc/pechersk/.local/bin:$PATH"
 export PATH="/u/nyc/pechersk/.cabal/bin:$PATH"
-export PATH="/u/nyc/pechersk/Downloads/stack-1.2.0-linux-x86_64:$PATH"
 
 #function git_prompt_info() {
   #ref=$(git symbolic-ref HEAD 2> /dev/null) || return
