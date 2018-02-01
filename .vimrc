@@ -257,6 +257,8 @@ highlight clear SignColumn
 call gitgutter#highlight#define_highlights()
 
 let g:haskellmode_completion_ghc = 0
+let g:necoghc_use_stack = 0
+let g:necoghc_enable_detailed_browse = 1
 autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
 
 "imap <c-space> <c-x><c-o>
