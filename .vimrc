@@ -10,19 +10,21 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 Plugin 'embear/vim-localvimrc'
-Plugin 'rking/ag.vim'
-Plugin 'kien/ctrlp.vim'
+Plugin 'mileszs/ack.vim'
+Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/nerdtree'
 Plugin 'ervandew/supertab'
-Plugin 'scrooloose/syntastic'
+" Plugin 'valloric/youcompleteme'
+"Plugin 'scrooloose/syntastic'
+Plugin 'w0rp/ale'
 Plugin 'bling/vim-airline'
 Plugin 'jeetsukumaran/vim-buffergator'
-Plugin 'kchmck/vim-coffee-script'
+"Plugin 'kchmck/vim-coffee-script'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'tpope/vim-fugitive'
 Plugin 'airblade/vim-gitgutter'
-Plugin 'tpope/vim-haml'
+"Plugin 'tpope/vim-haml'
 Plugin 'pangloss/vim-javascript'
 Plugin 'elzr/vim-json'
 Plugin 'plasticboy/vim-markdown'
@@ -33,32 +35,32 @@ Plugin 'tpope/vim-surround'
 Plugin 'bronson/vim-trailing-whitespace'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'Lokaltog/vim-easymotion'
-Plugin 'KabbAmine/zeavim.vim'
-Plugin 'ngmy/vim-rubocop'
-Plugin 'mileszs/ack.vim'
+"Plugin 'KabbAmine/zeavim.vim'
+"Plugin 'ngmy/vim-rubocop'
 Plugin 'kurkale6ka/vim-pairs'
 Plugin 'hynek/vim-python-pep8-indent'
 Plugin 'eagletmt/ghcmod-vim'
 Plugin 'eagletmt/neco-ghc'
 Plugin 'tomtom/tlib_vim'
 Plugin 'MarcWeber/vim-addon-mw-utils'
-Plugin 'garbas/vim-snipmate'
+" Plugin 'garbas/vim-snipmate'
 Plugin 'godlygeek/tabular'
-Plugin 'Shougo/neocomplete.vim'
+" Plugin 'Shougo/neocomplete.vim'
 Plugin 'Shougo/vimproc.vim'
-Plugin 'davidhalter/jedi-vim'
+"Plugin 'davidhalter/jedi-vim', {'branch': 'dev'}
 Plugin 'yhat/vim-docstring'
 Plugin 'heavenshell/vim-pydocstring'
 Plugin 'junegunn/vader.vim'
 "Plugin 'wilywampa/vim-ipython'
+Plugin 'tell-k/vim-autopep8'
+Plugin 'tpope/vim-obsession'
+Plugin 'mbbill/undotree'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
 
 let g:localvimrc_ask = 0
-
-set omnifunc=syntaxcomplete#Complete
 
 let mapleader = ";" " Leader
 
@@ -112,28 +114,39 @@ set smartcase
 
 " Solarized color scheme
 syntax on
-" let g:solarized_visibility = "high"
-" let g:solarized_contrast = "high"
+"let g:solarized_visibility = "high"
+"let g:solarized_contrast = "high"
 colorscheme solarized
 set background=dark
-set t_Co=256
+"set t_Co=8
 
 " Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
 " set grepprg=grep " Use Ag over Grep
 " let g:ctrlp_user_command = 'grep %s -l""'
-let g:ctrlp_use_caching = 0
+let g:ctrlp_use_caching = 1
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_working_path_mode = 0
 " bind K to grep word under cursor
-"nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+" nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
-" Syntastic settings
-let g:syntastic_ruby_checkers=['rubocop']
-let g:syntastic_python_checkers=['pylint']
-let g:syntastic_mode_map = { 'mode': 'passive',
-                           \ 'active_filetypes': ['py'],
-                           \ 'passive_filetypes': [] }
+" ack settings
+let g:ack_default_options = " -H --nopager --nocolor --nogroup --column"
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
+
+" xclip settings
+map <Leader>x :silent :w !xclip -selection clipboard<CR><CR>
+vmap <Leader>x "+y
+map <Leader>y "+yy
+map <Leader>Y "+y$
+
+" nerdcommenter
+let g:NERDSpaceDelims = 1
+let g:NERDCommentEmptyLines = 1
+let g:NERDTrimTrailingWhitespace = 1
+let g:NERDCompactSexyComs = 1
 
 " Airline settings
 
@@ -166,13 +179,14 @@ map <C-h> <C-W>h
 map <C-l> <C-W>l
 
 inoremap jj <ESC> " jj quickly for escape
+
 map <Leader>N :NERDTreeToggle<CR>" Leader-n for NERDTree
 
 " Always use vertical diffs
 set diffopt+=vertical
 
 " Switch between the last two files
-nnoremap <leader><leader> <c-^>
+nnoremap <Leader>z <c-^>
 
 " Switch from old to new ruby hash syntax
 nmap <Leader>h :%s/:\([^=,'"]*\) =>/\1:/gc
@@ -193,13 +207,13 @@ cnoremap <Leader>' <c-r>"
 " Map <Leader>r to do _:! python %<Enter>_ which runs current file using python
 nnoremap <Leader>r :! python %<Enter>
 
+" JSON.vim settings
 let g:vim_json_syntax_conceal = 0
 
 " settings from sdiehl vim page
 set nowrap
 set showmode
 set tw=80
-set smarttab
 set smarttab
 set softtabstop=2
 "set mouse=a
@@ -213,20 +227,8 @@ set completeopt+=longest
 
 set cmdheight=1
 
-map <Leader>s :SyntasticToggleMode<CR>
-
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_enable_higlighting = 1
-
 let g:SuperTabDefaultCompletionType = '<c-x><c-o>'
-"let g:SuperTabDefaultCompletionType = "context"
+" let g:SuperTabDefaultCompletionType = "context"
 
 if has("gui_running")
   imap <c-space> <c-r>=SuperTabAlternateCompletion("\<lt>c-x>\<lt>c-o>")<cr>
@@ -236,6 +238,14 @@ else " no gui
   endif
 endif
 
+" ALE settings
+let g:ale_fixers = {
+\    'python': ['yapf'],
+\}
+let g:ale_linters = {
+\    'haskell': ['stack-ghc-mod', 'hlint'],
+\}
+let g:airline#extensions#ale#enabled = 1
 
 vmap t= :Tabularize /=<CR>
 vmap t; :Tabularize /::<CR>
@@ -260,17 +270,17 @@ nmap <Leader>e ienumerate(<Esc><Esc>t:a)<Esc><Esc>
 
 let g:ctrlp_custom_ignore = 'tasks_output\|tasks_running'
 
-autocmd FileType python setlocal omnifunc=jedi#completions
-let g:jedi#completions_enabled = 0
-let g:jedi#auto_vim_configuration = 0
-let g:jedi#popup_on_dot = 0
-let g:jedi#show_call_signatures = 1
-"Fix E121: Undefined variable: g:neocomplete#force_omni_input_patterns
-if !exists('g:neocomplete#force_omni_input_patterns')
-  let g:neocomplete#force_omni_input_patterns = {}
-endif
-let g:neocomplete#force_omni_input_patterns.python =
-\ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
+" autocmd FileType python setlocal omnifunc=jedi#completions
+"let g:jedi#completions_enabled = 0
+"let g:jedi#auto_vim_configuration = 0
+"let g:jedi#popup_on_dot = 0
+"let g:jedi#show_call_signatures = 1
+""Fix E121: Undefined variable: g:neocomplete#force_omni_input_patterns
+"if !exists('g:neocomplete#force_omni_input_patterns')
+  "let g:neocomplete#force_omni_input_patterns = {}
+"endif
+"let g:neocomplete#force_omni_input_patterns.python =
+"\ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
  "alternative pattern: '\h\w*\|[^. \t]\.\w*'
 
 " Indent Python in the Google way.
@@ -317,3 +327,30 @@ nmap <silent> <Leader>i <Plug>(pydocstring)
 let g:pydocstring_templates_dir="/u/nyc/pechersk/doctemplates/"
 
 "source ~/.vim/bundle/vim-ipython/ftplugin/python/ipy.vim
+
+" autopep8 settings
+autocmd FileType python vnoremap <silent> <Leader>A j:Autopep8<CR>
+let g:autopep8_indent_size=2
+let g:autopep8_disable_show_diff=0
+let g:autopep8_max_line_length=120
+
+" undofile settings
+if has('persistent_undo')
+  set undodir=~/.undodir/
+  set undofile
+endif
+map <Leader>U :UndotreeToggle<CR>
+
+
+" fasta file settings
+autocmd BufRead,BufNewFile *.fasta set tw=80
+
+" toggle term styles
+function! ToggleTermStyle()
+  if &term ==# "xterm-256color"
+    set term=xterm
+  else
+    set term=xterm-256color
+  endif
+endfunction
+map <Leader>Zt :call ToggleTermStyle()<CR>
