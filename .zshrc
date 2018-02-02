@@ -93,6 +93,8 @@ export DISPLAY=:0
 alias remotewin='xfreerdp -a 16 -g 960x1040 -d deshaw spacemap -r sound:remote &'
 alias gerrit="ssh gerrit gerrit"
 
+export DISPLAY=:0
+
 function job_parse() {
   first_digit=`echo $1 | cut -c1`
   sub_dir_digits=`echo $1 | cut -c2-4 | bc`
