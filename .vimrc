@@ -105,7 +105,7 @@ set colorcolumn=+1
 " Tag completion using excuberant ctags
 set complete=.,t
 set tags=tags;/
-set wildignore+=*/tmp/*,*/.git/*,*/.bundle/*,*/coverage/*,*/public/*,*/log/*,*/vendor/*
+set wildignore+=*/tmp/*,*/.git/*,*/.bundle/*,*/coverage/*,*/public/*,*/log/*,*/vendor/*,*/.stack-work/*
 
 " Search settings
 set incsearch
