@@ -1,5 +1,8 @@
+export TERM="xterm-256color"
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
+export VISUAL=vim
+export EDITOR="$VISUAL"
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -88,8 +91,6 @@ alias edit-vim="vim ~/.vimrc"
 alias xcl="xclip -selection clipboard"
 alias gxcl="xclip -selection clipboard -o"
 
-export DISPLAY=:0
-
 alias remotewin='xfreerdp -a 16 -g 960x1040 -d deshaw spacemap -r sound:remote &'
 alias gerrit="ssh gerrit gerrit"
 
@@ -113,8 +114,8 @@ autoload -Uz compinit && compinit -i
 autoload -Uz bashcompinit && bashcompinit
 
 export CUDA_VISIBLE_DEVICES=0
-export PATH="/u/nyc/pechersk/.local/bin:$PATH"
-export PATH="/u/nyc/pechersk/.cabal/bin:$PATH"
+export PATH="~/.local/bin:$PATH"
+export PATH="~/.cabal/bin:$PATH"
 
 #function git_prompt_info() {
   #ref=$(git symbolic-ref HEAD 2> /dev/null) || return
