@@ -53,6 +53,8 @@ Plugin 'heavenshell/vim-pydocstring'
 Plugin 'junegunn/vader.vim'
 "Plugin 'wilywampa/vim-ipython'
 Plugin 'tell-k/vim-autopep8'
+Plugin 'neovimhaskell/haskell-vim'
+Plugin 'alx741/vim-hindent'
 Plugin 'tpope/vim-obsession'
 Plugin 'mbbill/undotree'
 
@@ -122,22 +124,35 @@ set background=dark
 
 " Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
 " set grepprg=grep " Use Ag over Grep
-" let g:ctrlp_user_command = 'grep %s -l""'
-let g:ctrlp_use_caching = 1
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
-let g:ctrlp_working_path_mode = 0
-" bind K to grep word under cursor
-" nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
-
 " ack settings
 let g:ack_default_options = " -H --nopager --nocolor --nogroup --column"
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
 endif
+if executable('rg')
+  set grepprg=rg\ --vimgrep\ --no-heading " Use Ripgrep over Grep
+  let g:ackprg = 'rg --vimgrep --no-heading'
+endif
+
+set grepformat=%f:%l:%c:%m,%f:%l:%m
+
+let g:ack_autoclose = 1
+let g:ack_autofold_results = 1
+" let g:ctrlp_user_command = 'grep %s -l""'
+let g:ctrlp_use_caching = 1
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_working_path_mode = 0
+let g:ctrlp_show_hidden = 1
+" bind K to grep word under cursor
+"nnoremap K :silent grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+"vnoremap K y:grep! "<C-R>""<CR>:cw<CR>
+nnoremap K :silent Ack! "\b<C-R><C-W>\b"<CR>
+vnoremap K y:silent Ack! "<C-R>""<CR>
 
 " xclip settings
 map <Leader>x :silent :w !xclip -selection clipboard<CR><CR>
+" map <Leader>x :silent :w !clip.exe<CR>
 vmap <Leader>x "+y
 map <Leader>y "+yy
 map <Leader>Y "+y$
@@ -326,7 +341,13 @@ let pyindent_open_paren="&sw*2"
 autocmd FileType python PyDocHide
 
 nmap <silent> <Leader>i <Plug>(pydocstring)
-let g:pydocstring_templates_dir="/u/nyc/pechersk/doctemplates/"
+let g:pydocstring_templates_dir="~/doctemplates/"
+
+"turn off sound bells
+set noeb vb t_vb=
+if has('autocmd')
+  autocmd GUIEnter * set vb t_vb=
+endif
 
 "source ~/.vim/bundle/vim-ipython/ftplugin/python/ipy.vim
 
@@ -343,6 +364,43 @@ if has('persistent_undo')
 endif
 map <Leader>U :UndotreeToggle<CR>
 
+" neovimhaskell/haskell-vim
+
+" Align 'then' two spaces after 'if'
+let g:haskell_indent_if = 2
+" Indent 'where' block two spaces under previous body
+let g:haskell_indent_before_where = 2
+" Allow a second case indent style (see haskell-vim README)
+let g:haskell_indent_case_alternative = 1
+" Only next under 'let' if there's an equals sign
+let g:haskell_indent_let_no_in = 0
+
+" hindent & stylish-haskell
+
+" Indenting on save is too aggressive for me
+let g:hindent_on_save = 0
+
+" Helper function, called below with mappings
+function! HaskellFormat(which) abort
+  if a:which ==# 'hindent' || a:which ==# 'both'
+    :Hindent
+  endif
+  if a:which ==# 'stylish' || a:which ==# 'both'
+    silent! exe 'undojoin'
+    silent! exe 'keepjumps %!stylish-haskell'
+  endif
+endfunction
+
+" Key bindings
+augroup haskellStylish
+  au!
+  " Just hindent
+  au FileType haskell nnoremap <leader>hi :Hindent<CR>
+  " Just stylish-haskell
+  au FileType haskell nnoremap <leader>hs :call HaskellFormat('stylish')<CR>
+  " First hindent, then stylish-haskell
+  au FileType haskell nnoremap <leader>hf :call HaskellFormat('both')<CR>
+augroup END
 
 " fasta file settings
 autocmd BufRead,BufNewFile *.fasta set tw=80
@@ -355,4 +413,5 @@ function! ToggleTermStyle()
     set term=xterm-256color
   endif
 endfunction
+
 map <Leader>Zt :call ToggleTermStyle()<CR>
